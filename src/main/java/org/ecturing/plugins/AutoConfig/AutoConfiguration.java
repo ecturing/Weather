@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AutoConfiguration {
-    @Bean
+    @Bean(name = "Weather")
     public Weather run(){
         return new Weather();
     }
