@@ -1,5 +1,7 @@
 package org.ecturing.plugins;
 
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
@@ -7,6 +9,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
 import org.ecturing.Plugins;
+import org.ecturing.plugins.model.QRawMessage;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -49,6 +52,15 @@ public class Weather implements Plugins {
         }
         httpGet.abort();
         httpClient.getConnectionManager().shutdown();
-        return "test";
+        JSONObject Rdata=JSONObject.parseObject(result);
+        JSONObject data=Rdata.getJSONObject("data");
+        JSONObject observe=data.getJSONObject("observe");
+        return new QRawMessage("孝感",
+                observe.getString("degree"),
+                observe.getString("humidity"),
+                observe.getInteger("wind_power")
+        ).toString();
+//        return data.toString();
     }
+
 }
